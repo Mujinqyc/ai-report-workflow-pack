@@ -18,4 +18,16 @@ const css = fs.readFileSync(path.join(__dirname, "style.css"), "utf8");
 assert.ok(css.includes(".copy-button:hover"));
 assert.ok(css.includes(".copy-button.is-copied"));
 
+const optimizedReports = generateReports({
+  completed: "写页面\n改按钮\n整理文档",
+  problems: "不熟 JS\n样式乱",
+  plan: "继续优化\n加说明",
+});
+
+assert.ok(optimizedReports.formal.includes("完成页面相关内容的编写与整理"));
+assert.ok(optimizedReports.formal.includes("优化按钮交互与显示效果"));
+assert.ok(optimizedReports.formal.includes("整理项目文档与说明材料"));
+assert.ok(!optimizedReports.formal.includes("- 写页面"));
+assert.ok(!optimizedReports.formal.includes("- 改按钮"));
+
 console.log("OK: report generation tests passed.");
