@@ -2,23 +2,97 @@ function normalizeInput(value) {
   return String(value || "").trim();
 }
 
-function toBulletList(value) {
-  const lines = normalizeInput(value)
+function parseInputLines(value) {
+  return normalizeInput(value)
     .split(/\r?\n|；|;/)
     .map((line) => line.trim())
     .filter(Boolean);
+}
+
+function optimizeLine(line, type) {
+  const text = line.trim().replace(/\s+/g, " ");
+  const lowerText = text.toLowerCase();
+
+  if (type === "completed") {
+    if (text.includes("页面") && (text.includes("写") || text.includes("做"))) {
+      return "完成页面相关内容的编写与整理";
+    }
+    if (text.includes("按钮") && (text.includes("改") || text.includes("优化"))) {
+      return "优化按钮交互与显示效果";
+    }
+    if (text.includes("文档") && (text.includes("整理") || text.includes("写"))) {
+      return "整理项目文档与说明材料";
+    }
+    if (text.includes("测试")) {
+      return `完成${text.replace(/^完成/, "")}，验证核心功能是否正常`;
+    }
+    if (text.startsWith("写")) {
+      return `编写${text.slice(1)}相关内容`;
+    }
+    if (text.startsWith("改")) {
+      return `优化${text.slice(1)}相关内容`;
+    }
+    if (!/^(完成|优化|整理|编写|修复|新增|增加)/.test(text)) {
+      return `推进${text}相关工作`;
+    }
+    return text;
+  }
+
+  if (type === "problems") {
+    if ((text.includes("不熟") || text.includes("不会")) && lowerText.includes("js")) {
+      return "对 JavaScript 事件绑定和页面交互逻辑还不够熟悉";
+    }
+    if (text.includes("样式") && (text.includes("乱") || text.includes("不稳定"))) {
+      return "页面样式在不同宽度下显示还不够稳定";
+    }
+    if (text.includes("报错")) {
+      return `出现${text}问题，需要继续定位原因`;
+    }
+    if (text.startsWith("不熟")) {
+      return `对${text.slice(2)}还不够熟悉，需要继续练习`;
+    }
+    if (!/^(对|页面|当前|存在|出现)/.test(text)) {
+      return `当前需要处理的问题：${text}`;
+    }
+    return text;
+  }
+
+  if (type === "plan") {
+    if (text.includes("继续") && text.includes("优化")) {
+      return "继续优化页面体验和生成结果质量";
+    }
+    if (text.includes("说明") || text.includes("文档")) {
+      return "补充项目说明和使用文档";
+    }
+    if (text.includes("按钮")) {
+      return "完善按钮交互与复制反馈";
+    }
+    if (text.startsWith("加")) {
+      return `增加${text.slice(1)}相关功能`;
+    }
+    if (!/^(优化|增加|整理|完成|补充|修复|继续)/.test(text)) {
+      return `继续推进${text}相关工作`;
+    }
+    return text;
+  }
+
+  return text;
+}
+
+function toBulletList(value, type = "general") {
+  const lines = parseInputLines(value);
 
   if (lines.length === 0) {
     return "- 暂无填写内容";
   }
 
-  return lines.map((line) => `- ${line}`).join("\n");
+  return lines.map((line) => `- ${optimizeLine(line, type)}`).join("\n");
 }
 
 function generateReports(input) {
-  const completed = toBulletList(input.completed);
-  const problems = toBulletList(input.problems);
-  const plan = toBulletList(input.plan);
+  const completed = toBulletList(input.completed, "completed");
+  const problems = toBulletList(input.problems, "problems");
+  const plan = toBulletList(input.plan, "plan");
 
   return {
     formal: [
@@ -168,5 +242,5 @@ if (typeof document !== "undefined") {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { generateReports, toBulletList };
+  module.exports = { generateReports, toBulletList, optimizeLine };
 }
