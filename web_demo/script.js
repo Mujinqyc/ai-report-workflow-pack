@@ -131,9 +131,12 @@ async function copyOutput(targetId, button) {
   const text = document.getElementById(targetId).textContent;
   await navigator.clipboard.writeText(text);
   const originalText = button.textContent;
+  button.classList.add("is-copied");
   button.textContent = "已复制";
   window.setTimeout(() => {
+    button.classList.remove("is-copied");
     button.textContent = originalText;
+    button.blur();
   }, 1200);
 }
 
