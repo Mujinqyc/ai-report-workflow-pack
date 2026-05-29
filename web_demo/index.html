@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 日报周报自动生成工作流包</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero">
+        <p class="eyebrow">本地演示版 MVP</p>
+        <h1>AI 日报周报自动生成工作流包</h1>
+        <p class="intro">
+          输入今天完成的工作、遇到的问题和明天计划，一键生成正式日报、简洁日报、领导汇报版和周报总结。
+        </p>
+      </section>
+
+      <section class="workspace">
+        <form class="input-panel" id="reportForm">
+          <div class="field">
+            <label for="completed">今天完成的工作</label>
+            <textarea id="completed" rows="7" placeholder="例如：完成网页页面结构；整理产品说明文档；编写日报生成逻辑"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="problems">遇到的问题</label>
+            <textarea id="problems" rows="5" placeholder="例如：对 JavaScript 事件绑定还不熟悉；页面样式还需要优化"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="plan">明天计划</label>
+            <textarea id="plan" rows="5" placeholder="例如：优化页面样式；增加复制按钮；整理演示脚本"></textarea>
+          </div>
+
+          <div class="actions">
+            <button type="submit">生成报告</button>
+            <button type="button" class="secondary" id="fillExample">填入示例</button>
+            <button type="button" class="ghost" id="clearAll">清空</button>
+          </div>
+        </form>
+
+        <section class="output-panel" aria-live="polite">
+          <article class="result-block">
+            <div class="result-header">
+              <h2>正式日报</h2>
+              <button type="button" class="copy-button" data-copy-target="formalOutput">复制</button>
+            </div>
+            <pre id="formalOutput">点击“生成报告”后显示内容。</pre>
+          </article>
+
+          <article class="result-block">
+            <div class="result-header">
+              <h2>简洁日报</h2>
+              <button type="button" class="copy-button" data-copy-target="shortOutput">复制</button>
+            </div>
+            <pre id="shortOutput">点击“生成报告”后显示内容。</pre>
+          </article>
+
+          <article class="result-block">
+            <div class="result-header">
+              <h2>领导汇报版</h2>
+              <button type="button" class="copy-button" data-copy-target="leaderOutput">复制</button>
+            </div>
+            <pre id="leaderOutput">点击“生成报告”后显示内容。</pre>
+          </article>
+
+          <article class="result-block">
+            <div class="result-header">
+              <h2>周报总结</h2>
+              <button type="button" class="copy-button" data-copy-target="weeklyOutput">复制</button>
+            </div>
+            <pre id="weeklyOutput">点击“生成报告”后显示内容。</pre>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
